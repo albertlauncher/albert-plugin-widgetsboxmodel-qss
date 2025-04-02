@@ -591,14 +591,17 @@ void Window::init_statemachine()
 
     auto activate = [this, s_results_matches, s_results_fallbacks](uint i, uint a)
     {
-        if (s_results_matches->active())
-            current_query->activateMatch(i, a);
-        else if (s_results_fallbacks->active())
-            current_query->activateFallback(i, a);
+        if (s_results_matches->active()){
+            if (current_query->activateMatch(i, a))
+                hide();
+        }
+        else if (s_results_fallbacks->active()){
+            if (current_query->activateFallback(i, a))
+                hide();
+        }
         else
             WARN << "Activated action in neither Match nor Fallback state.";
 
-        hide();
     };
 
     QObject::connect(results_list, &ResizingList::activated,
