@@ -506,10 +506,12 @@ void Window::init_statemachine()
         connect(results_list->selectionModel(), &QItemSelectionModel::currentChanged,
                 this, [this](const QModelIndex &current, const QModelIndex&) {
                     if (results_list->currentIndex().isValid())
-                        input_line->setInputHint(current.data((int)ItemRoles::InputActionRole).toString());
+                        if (auto c = current.data((int)ItemRoles::InputActionRole).toString();
+                            !c.isEmpty())
+                            input_line->setInputHint(current_query->trigger() + c);
                 });
 
-        if (current_query->string().isEmpty()) {
+        if (current_query->string().isEmpty() && !current_query->synopsis().isEmpty()) {
             // avoid setting completion when synopsis should be shown
             const QSignalBlocker block(results_list->selectionModel());
             results_list->setCurrentIndex(m->index(0, 0));
@@ -769,8 +771,8 @@ bool Window::eventFilter(QObject *watched, QEvent *event)
                 // Toggle insert completion string
                 if (auto i = results_list->currentIndex(); i.isValid())
                     if (auto t = i.data((int)ItemRoles::InputActionRole).toString();
-                        !(t.isNull() && t.isEmpty()))
-                        input_line->setText(t);
+                        !(t.isEmpty()))
+                        input_line->setText(current_query->trigger() + t);
                 return true;
 
             case Qt::Key_Up:
