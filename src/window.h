@@ -71,6 +71,8 @@ public:
     bool showCentered() const;
     void setShowCentered(bool b = true);
 
+    bool darkMode() const;
+
 private:
 
     void init_statemachine();

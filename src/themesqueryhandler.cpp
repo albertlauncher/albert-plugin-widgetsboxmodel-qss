@@ -1,4 +1,4 @@
-// Copyright (c) 2022-2024 Manuel Schneider
+// Copyright (c) 2022-2025 Manuel Schneider
 
 #include "themesqueryhandler.h"
 #include "window.h"
@@ -23,34 +23,35 @@ QString ThemesQueryHandler::defaultTrigger() const { return "theme "; }
 
 void ThemesQueryHandler::handleTriggerQuery(Query &query)
 {
+    vector<Action> actions;
+
     Matcher matcher(query);
 
     for (const auto &[name, path] : window->themes)
         if (auto m = matcher.match(name); m)
-            query.add(
-                StandardItem::make(
-                    QString("theme_%1").arg(name),
-                    name,
-                    path,
-                    {QStringLiteral("gen:?&text=🎨&fontscalar=0.7")},
-                    {
-                        {
-                            "apply", Window::tr("Apply theme"),
-                            [w=window, n=name]{ w->applyThemeFile(w->themes.at(n)); }
-                        },
-                        {
-                            "setlight", Window::tr("Use in light mode"),
-                            [w=window, n=name]{ w->setLightTheme(n); }
-                        },
-                        {
-                            "setdark", Window::tr("Use in dark mode"),
-                            [w=window, n=name]{ w->setDarkTheme(n); }
-                        },
-                        {
-                            "open", Window::tr("Open theme file"),
-                            [p=path]{ open(p); }
-                        }
-                    }
-                )
-            );
+        {
+            actions.clear();
+
+            actions.emplace_back("setlight",
+                                 Window::tr("Use in light mode"),
+                                 [&]{ window->setLightTheme(name); },
+                                 false);
+
+            actions.emplace_back("setdark",
+                                 Window::tr("Use in dark mode"),
+                                 [&]{ window->setDarkTheme(name); },
+                                 false);
+
+            if (window->darkMode())
+                std::swap(actions[0], actions[1]);
+
+            actions.emplace_back("open", Window::tr("Open theme file"), [p = path] { open(p); });
+
+            query.add(StandardItem::make(QString("theme_%1").arg(name),
+                                         name,
+                                         path,
+                                         name,
+                                         {QStringLiteral("gen:?&text=🎨")},
+                                         actions));
+        }
 }

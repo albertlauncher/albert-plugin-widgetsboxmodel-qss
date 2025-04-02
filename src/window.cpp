@@ -962,3 +962,5 @@ bool Window::quitOnClose() const
 
 void Window::setQuitOnClose(bool b)
 { plugin->settings()->setValue(CFG_QUIT_ON_CLOSE, quitOnClose_ = b); }
+
+bool Window::darkMode() const { return dark_mode_; }
