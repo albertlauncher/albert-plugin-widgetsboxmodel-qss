@@ -115,10 +115,6 @@
         <translation>Wechsle Themen</translation>
     </message>
     <message>
-        <source>Apply theme</source>
-        <translation>Thema anwenden</translation>
-    </message>
-    <message>
         <source>Use in light mode</source>
         <translation>Im hellen Modus verwenden</translation>
     </message>

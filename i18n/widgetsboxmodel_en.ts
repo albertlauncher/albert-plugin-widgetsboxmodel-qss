@@ -115,10 +115,6 @@
         <translation></translation>
     </message>
     <message>
-        <source>Apply theme</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Use in light mode</source>
         <translation></translation>
     </message>
