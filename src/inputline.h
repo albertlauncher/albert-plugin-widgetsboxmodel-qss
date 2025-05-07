@@ -1,7 +1,6 @@
 // Copyright (c) 2022-2024 Manuel Schneider
 
 #pragma once
-
 #include <QLineEdit>
 #include <albert/inputhistory.h>
 
@@ -9,7 +8,6 @@
 class InputLine : public QLineEdit
 {
 public:
-
     InputLine(QWidget *parent);
 
     void setInputHint(const QString &text);
@@ -21,12 +19,11 @@ public:
     bool clear_on_hide;
 
 private:
-
     void paintEvent(QPaintEvent *event) override;
     void hideEvent(QHideEvent *event) override;
 
     QString input_hint_;
-    albert::InputHistory history_;
+    albert::util::InputHistory history_;
     QString user_text_; // used for history search
     uint trigger_length_;
 
