@@ -34,41 +34,42 @@
 #include <albert/pluginloader.h>
 #include <albert/pluginmetadata.h>
 #include <albert/query.h>
+using namespace Qt::StringLiterals;
 using namespace albert;
 using namespace std;
 
 
 namespace  {
 
-const uint    DEF_SHADOW_SIZE = 32;  // TODO user
-const char*   STATE_WND_POS  = "windowPosition";
+const auto DEF_SHADOW_SIZE        = 32;  // TODO user
+const auto STATE_WND_POS          = u"windowPosition"_s;
 
-const char*   CFG_CENTERED = "showCentered";
-const bool    DEF_CENTERED = true;
-const char*   CFG_FOLLOW_CURSOR = "followCursor";
-const bool    DEF_FOLLOW_CURSOR = true;
-const char*   CFG_THEME = "lightTheme";
-const char*   DEF_THEME = "Default System Palette";
-const char*   CFG_THEME_DARK = "darkTheme";
-const char*   DEF_THEME_DARK = DEF_THEME;
-const char*   CFG_HIDE_ON_FOCUS_LOSS = "hideOnFocusLoss";
-const bool    DEF_HIDE_ON_FOCUS_LOSS = true;
-const char*   CFG_QUIT_ON_CLOSE = "quitOnClose";
-const bool    DEF_QUIT_ON_CLOSE = false;
-const char*   CFG_CLEAR_ON_HIDE = "clearOnHide";
-const bool    DEF_CLEAR_ON_HIDE = false;
-const char*   CFG_ALWAYS_ON_TOP = "alwaysOnTop";
-const bool    DEF_ALWAYS_ON_TOP = true;
-const char*   CFG_HISTORY_SEARCH = "historySearch";
-const bool    DEF_HISTORY_SEARCH = true;
-const char*   CFG_MAX_RESULTS = "itemCount";
-const uint    DEF_MAX_RESULTS = 5;
-const char*   CFG_DISPLAY_SCROLLBAR = "displayScrollbar";
-const bool    DEF_DISPLAY_SCROLLBAR = false;
-const char*   CFG_CLIENT_SHADOW = "clientShadow";
-const bool    DEF_CLIENT_SHADOW = true;
-const char*   CFG_SYSTEM_SHADOW = "systemShadow";
-const bool    DEF_SYSTEM_SHADOW = true;
+const auto CFG_CENTERED           = u"showCentered"_s;
+const auto DEF_CENTERED           = true;
+const auto CFG_FOLLOW_CURSOR      = u"followCursor"_s;
+const auto DEF_FOLLOW_CURSOR      = true;
+const auto CFG_THEME              = u"lightTheme"_s;
+const auto DEF_THEME              = u"Default System Palette"_s;
+const auto CFG_THEME_DARK         = u"darkTheme"_s;
+const auto DEF_THEME_DARK         = DEF_THEME;
+const auto CFG_HIDE_ON_FOCUS_LOSS = u"hideOnFocusLoss"_s;
+const auto DEF_HIDE_ON_FOCUS_LOSS = true;
+const auto CFG_QUIT_ON_CLOSE      = u"quitOnClose"_s;
+const auto DEF_QUIT_ON_CLOSE      = false;
+const auto CFG_CLEAR_ON_HIDE      = u"clearOnHide"_s;
+const auto DEF_CLEAR_ON_HIDE      = false;
+const auto CFG_ALWAYS_ON_TOP      = u"alwaysOnTop"_s;
+const auto DEF_ALWAYS_ON_TOP      = true;
+const auto CFG_HISTORY_SEARCH     = u"historySearch"_s;
+const auto DEF_HISTORY_SEARCH     = true;
+const auto CFG_MAX_RESULTS        = u"itemCount"_s;
+const auto DEF_MAX_RESULTS        = 5;
+const auto CFG_DISPLAY_SCROLLBAR  = u"displayScrollbar"_s;
+const auto DEF_DISPLAY_SCROLLBAR  = false;
+const auto CFG_CLIENT_SHADOW      = u"clientShadow"_s;
+const auto DEF_CLIENT_SHADOW      = true;
+const auto CFG_SYSTEM_SHADOW      = u"systemShadow"_s;
+const auto DEF_SYSTEM_SHADOW      = true;
 
 //constexpr Qt::KeyboardModifier mods_mod[] = {
 //    Qt::ShiftModifier,
@@ -122,7 +123,9 @@ static map<QString, QString> findThemes(const QString &plugin_id)
         QStandardPaths::AppDataLocation, plugin_id, QStandardPaths::LocateDirectory);
 
     for (const QString &pluginDataPath : pluginDataPaths)
-        for (const auto &file_info : QDir(QString("%1/themes").arg(pluginDataPath)).entryInfoList(QStringList("*.qss"), QDir::Files | QDir::NoSymLinks))
+        for (const auto &file_info : QDir(u"%1/themes"_s.arg(pluginDataPath))
+                                         .entryInfoList(QStringList(u"*.qss"_s),
+                                                        QDir::Files | QDir::NoSymLinks))
             themes.emplace(file_info.baseName(), file_info.canonicalFilePath());
 
     if (themes.empty())
@@ -190,7 +193,7 @@ Window::Window(Plugin *p):
         input_line->installEventFilter(this);
 
         // reproducible UX
-        setStyle(QStyleFactory::create("Fusion"));
+        setStyle(QStyleFactory::create(u"Fusion"_s));
 
         connect(input_line, &InputLine::textChanged, this, &Window::inputChanged);
     }
@@ -656,12 +659,12 @@ void Window::applyThemeFile(const QString& path)
     QFile f(path);
     if (f.open(QFile::ReadOnly))
     {
-        setStyleSheet(f.readAll());
+        setStyleSheet(QString::fromUtf8(f.readAll()));
         f.close();
     }
     else
     {
-        auto msg = QString("%1:\n\n%2\n\n%3")
+        auto msg = u"%1:\n\n%2\n\n%3"_s
                        .arg(tr("The theme file could not be opened"), path, f.errorString());
         WARN << msg;
         QMessageBox::warning(this, qApp->applicationDisplayName(), msg);

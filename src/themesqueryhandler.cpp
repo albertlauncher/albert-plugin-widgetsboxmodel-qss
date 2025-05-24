@@ -5,9 +5,10 @@
 #include <albert/albert.h>
 #include <albert/matcher.h>
 #include <albert/standarditem.h>
+using namespace Qt::StringLiterals;
+using namespace albert::util;
 using namespace albert;
 using namespace std;
-using namespace util;
 
 ThemesQueryHandler::ThemesQueryHandler(Window *w) : window(w) {}
 
@@ -20,7 +21,7 @@ QString ThemesQueryHandler::name() const
 QString ThemesQueryHandler::description() const
 { return Window::tr("Switch themes"); }
 
-QString ThemesQueryHandler::defaultTrigger() const { return "theme "; }
+QString ThemesQueryHandler::defaultTrigger() const { return u"theme "_s; }
 
 void ThemesQueryHandler::handleTriggerQuery(Query &query)
 {
@@ -33,12 +34,12 @@ void ThemesQueryHandler::handleTriggerQuery(Query &query)
         {
             actions.clear();
 
-            actions.emplace_back("setlight",
+            actions.emplace_back(u"setlight"_s,
                                  Window::tr("Use in light mode"),
                                  [&]{ window->setLightTheme(name); },
                                  false);
 
-            actions.emplace_back("setdark",
+            actions.emplace_back(u"setdark"_s,
                                  Window::tr("Use in dark mode"),
                                  [&]{ window->setDarkTheme(name); },
                                  false);
@@ -46,13 +47,13 @@ void ThemesQueryHandler::handleTriggerQuery(Query &query)
             if (window->darkMode())
                 std::swap(actions[0], actions[1]);
 
-            actions.emplace_back("open", Window::tr("Open theme file"), [p = path] { open(p); });
+            actions.emplace_back(u"open"_s, Window::tr("Open theme file"), [p = path] { open(p); });
 
-            query.add(StandardItem::make(QString("theme_%1").arg(name),
+            query.add(StandardItem::make(u"theme_%1"_s.arg(name),
                                          name,
                                          path,
                                          name,
-                                         {QStringLiteral("gen:?&text=🎨")},
+                                         {u"gen:?&text=🎨"_s},
                                          actions));
         }
 }

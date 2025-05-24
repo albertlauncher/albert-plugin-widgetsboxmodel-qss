@@ -8,6 +8,7 @@
 #include <QStyleOptionButton>
 #include <QtSvg/QSvgRenderer>
 #include <albert/albert.h>
+using namespace Qt::StringLiterals;
 
 
 SettingsButton::SettingsButton(QWidget *parent) : QPushButton(parent)
@@ -20,12 +21,12 @@ SettingsButton::SettingsButton(QWidget *parent) : QPushButton(parent)
     connect(rotation_animation.get(), &QPropertyAnimation::valueChanged,
             this, static_cast<void (QWidget::*)()>(&QWidget::update));
 
-    svgRenderer_ = std::make_unique<QSvgRenderer>(QString(":gear"));
+    svgRenderer_ = std::make_unique<QSvgRenderer>(u":gear"_s);
 
     setCursor(Qt::PointingHandCursor);
 
-    auto *action = new QAction("Settings", this);
-    action->setShortcuts({QKeySequence("Ctrl+,"), QKeySequence("Alt+,")});
+    auto *action = new QAction(u"Settings"_s, this);
+    action->setShortcuts({QKeySequence(u"Ctrl+,"_s), QKeySequence(u"Alt+,"_s)});
     connect(action, &QAction::triggered, this, [](){ albert::showSettings(); });
     connect(this, &QPushButton::clicked, action, &QAction::trigger);
 }

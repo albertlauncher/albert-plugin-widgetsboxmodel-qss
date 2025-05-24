@@ -47,17 +47,17 @@ QVariant ResultItemsModel::getResultItemData(const ResultItem &result_item, int 
         case (int)ItemRoles::TextRole:
         {
             QString text = item->text();
-            text.replace('\n', ' ');
+            text.replace(u'\n', u' ');
             return text;
         }
         case (int)ItemRoles::SubTextRole:
         {
             QString text = item->subtext();
-            text.replace('\n', ' ');
+            text.replace(u'\n', u' ');
             return text;
         }
         case Qt::ToolTipRole:
-            return QString("%1\n%2").arg(item->text(), item->subtext());
+            return QStringLiteral("%1\n%2").arg(item->text(), item->subtext());
 
         case (int)ItemRoles::InputActionRole:
             return item->inputActionText();

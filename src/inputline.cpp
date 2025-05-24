@@ -7,8 +7,7 @@
 #include <albert/albert.h>
 
 InputLine::InputLine(QWidget *parent):
-    QLineEdit(parent),
-    history_((albert::dataLocation() / "albert.history").c_str())
+    QLineEdit(parent)
 {
     connect(this, &QLineEdit::textEdited, this, [this]{
         history_.resetIterator();
@@ -74,7 +73,7 @@ void InputLine::paintEvent(QPaintEvent *event)
         if (input_hint_.startsWith(text()))
             hint = input_hint_.mid(text().length());
         else
-            hint = QString(" %1").arg(input_hint_);
+            hint = QStringLiteral(" %1").arg(input_hint_);
 
         auto fm = fontMetrics();
         auto r = content_rect;

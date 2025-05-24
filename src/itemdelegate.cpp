@@ -54,8 +54,8 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &options,
     QPixmap pm;
     auto icon_urls = index.data(static_cast<int>(ItemRoles::IconUrlsRole)).value<QStringList>();
     auto icon_size = option.decorationSize.height();
-    const auto icon_cache_key = QString("albert$%1%2x%3")
-                                    .arg(icon_urls.join(""))
+    const auto icon_cache_key = QStringLiteral("albert$%1%2x%3")
+                                    .arg(icon_urls.join(QString()))
                                     .arg(icon_size)
                                     .arg(option.widget->devicePixelRatioF());
     if (!QPixmapCache::find(icon_cache_key, &pm))
