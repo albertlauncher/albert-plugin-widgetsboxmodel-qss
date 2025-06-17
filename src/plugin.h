@@ -8,7 +8,7 @@
 #include <albert/frontend.h>
 #include <albert/plugininstance.h>
 
-class Plugin : public albert::Frontend,
+class Plugin : public albert::detail::Frontend,
                public albert::PluginInstance
 {
     ALBERT_PLUGIN

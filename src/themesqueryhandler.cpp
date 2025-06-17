@@ -25,23 +25,21 @@ QString ThemesQueryHandler::defaultTrigger() const { return u"theme "_s; }
 
 void ThemesQueryHandler::handleTriggerQuery(Query &query)
 {
-    vector<Action> actions;
-
+    vector<shared_ptr<Item>> items;
     Matcher matcher(query);
-
     for (const auto &[name, path] : window->themes)
         if (auto m = matcher.match(name); m)
         {
-            actions.clear();
+            vector<Action> actions;
 
             actions.emplace_back(u"setlight"_s,
                                  Window::tr("Use in light mode"),
-                                 [&]{ window->setLightTheme(name); },
+                                 [=, this]{ window->setLightTheme(name); },
                                  false);
 
             actions.emplace_back(u"setdark"_s,
                                  Window::tr("Use in dark mode"),
-                                 [&]{ window->setDarkTheme(name); },
+                                 [=, this]{ window->setDarkTheme(name); },
                                  false);
 
             if (window->darkMode())
@@ -49,11 +47,12 @@ void ThemesQueryHandler::handleTriggerQuery(Query &query)
 
             actions.emplace_back(u"open"_s, Window::tr("Open theme file"), [p = path] { open(p); });
 
-            query.add(StandardItem::make(u"theme_%1"_s.arg(name),
-                                         name,
-                                         path,
-                                         name,
-                                         {u"gen:?&text=🎨"_s},
-                                         actions));
+            items.emplace_back(StandardItem::make(u"theme_%1"_s.arg(name),
+                                                  name,
+                                                  path,
+                                                  QStringList{u"gen:?&text=🎨"_s},
+                                                  ::move(actions)));
         }
+
+    query.add(items);
 }

@@ -6,8 +6,8 @@
 #include <QPixmapCache>
 #include <albert/frontend.h>
 #include <albert/iconprovider.h>
+using namespace albert::detail;
 using namespace albert;
-using namespace util;
 
 
 ItemDelegate::ItemDelegate(QObject *parent) : QStyledItemDelegate(parent) {}

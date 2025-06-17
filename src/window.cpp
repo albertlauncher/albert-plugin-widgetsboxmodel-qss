@@ -137,7 +137,7 @@ static map<QString, QString> findThemes(const QString &plugin_id)
 }
 
 Window::Window(Plugin *p):
-    themes(findThemes(p->loader().metaData().id)),
+    themes(findThemes(p->loader().metadata().id)),
     plugin(p),
     frame(new QFrame(this)),
     input_line(new InputLine(frame)),
