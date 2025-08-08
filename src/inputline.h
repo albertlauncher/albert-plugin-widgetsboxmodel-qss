@@ -23,7 +23,7 @@ private:
     void hideEvent(QHideEvent *event) override;
 
     QString input_hint_;
-    albert::util::InputHistory history_;
+    albert::detail::InputHistory history_;
     QString user_text_; // used for history search
     uint trigger_length_;
 
