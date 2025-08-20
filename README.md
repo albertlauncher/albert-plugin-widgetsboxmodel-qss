@@ -1,11 +1,13 @@
+# Albert plugin: Widgets BoxModel QStyleSheets
+
 The main user interface can be customized using QStyleSheets.
-You might want to consider the convenient [theme creator](https://albertlauncher.github.io/themecreator/) written by Ricardo Fuhrmann. 
+You might want to consider the convenient [theme creator](https://albertlauncher.github.io/themecreator/) written by Ricardo Fuhrmann.
 If you're not satisfied with the output, you can still customize the style sheet.
 
 ##### Writing style sheets
 
 The user interface consists of five widgets: The container, the input line, the settings button the two list views for the items and their actions.
-In Qt terms a [QFrame](http://doc.qt.io/qt-6/qframe.html), a [QLineEdit](http://doc.qt.io/qt-6/qlineedit.html), a [QPushButton](http://doc.qt.io/qt-6/qpushbutton.html) and a [QListView](http://doc.qt.io/qt-6/qlistview.html). 
+In Qt terms a [QFrame](http://doc.qt.io/qt-6/qframe.html), a [QLineEdit](http://doc.qt.io/qt-6/qlineedit.html), a [QPushButton](http://doc.qt.io/qt-6/qpushbutton.html) and a [QListView](http://doc.qt.io/qt-6/qlistview.html).
 All of them support the box model.
 
 To differentiate the views they have an ID Selector to refer to it, for the sake of completeness all other widgets too: `frame`, `inputLine`, `settingsButton`, `resultsList` and `actionList`. You can identify them like this:
