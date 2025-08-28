@@ -60,17 +60,14 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &options,
                                     .arg(option.widget->devicePixelRatioF());
     if (!QPixmapCache::find(icon_cache_key, &pm))
     {
-        pm = pixmapFromUrls(icon_urls,
-                            QSize(icon_size, icon_size) * option.widget->devicePixelRatioF());
+        pm = pixmapFromUrls(icon_urls, int(icon_size * option.widget->devicePixelRatioF()));
         pm.setDevicePixelRatio(option.widget->devicePixelRatioF());
         QPixmapCache::insert(icon_cache_key, pm);
     }
 
     // Draw the icon such that it is centered in the icon_rect
-    painter->drawPixmap(icon_rect.x()
-                            + (icon_rect.width() - (int)pm.deviceIndependentSize().width()) / 2,
-                        icon_rect.y()
-                            + (icon_rect.height() - (int)pm.deviceIndependentSize().height()) / 2,
+    painter->drawPixmap(icon_rect.x() + (icon_rect.width() - (int)pm.deviceIndependentSize().width()) / 2,
+                        icon_rect.y() + (icon_rect.height() - (int)pm.deviceIndependentSize().height()) / 2,
                         pm);
 
     // Calculate content rects
