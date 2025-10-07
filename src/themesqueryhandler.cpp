@@ -2,6 +2,7 @@
 
 #include "themesqueryhandler.h"
 #include "window.h"
+#include <albert/iconutil.h>
 #include <albert/matcher.h>
 #include <albert/standarditem.h>
 #include <albert/systemutil.h>
@@ -50,7 +51,7 @@ void ThemesQueryHandler::handleTriggerQuery(Query &query)
             items.emplace_back(StandardItem::make(u"theme_%1"_s.arg(name),
                                                   name,
                                                   path,
-                                                  QStringList{u"gen:?&text=🎨"_s},
+                                                  []{ return makeGraphemeIcon(u"🎨"_s); },
                                                   ::move(actions)));
         }
 

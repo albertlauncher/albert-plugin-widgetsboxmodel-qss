@@ -21,7 +21,7 @@ SettingsButton::SettingsButton(QWidget *parent) : QPushButton(parent)
     connect(rotation_animation.get(), &QPropertyAnimation::valueChanged,
             this, static_cast<void (QWidget::*)()>(&QWidget::update));
 
-    svgRenderer_ = std::make_unique<QSvgRenderer>(u":gear"_s);
+    svgRenderer_ = std::make_unique<QSvgRenderer>(u":/icons/gear"_s);
 
     setCursor(Qt::PointingHandCursor);
 

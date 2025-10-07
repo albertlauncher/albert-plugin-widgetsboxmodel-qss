@@ -5,7 +5,6 @@
 #include <QPainter>
 #include <QPixmapCache>
 #include <albert/frontend.h>
-#include <albert/iconprovider.h>
 using namespace albert::detail;
 using namespace albert;
 
@@ -51,17 +50,18 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &options,
         option.decorationSize);
 
     // Get the icon
+    const auto icon = index.data((int)ItemRoles::IconRole).value<QIcon>();
+
+    const auto icon_size = option.decorationSize.height();
+
+    const auto dpr = option.widget->devicePixelRatio();
+
+    const auto icon_cache_key = QStringLiteral("albert$%1%2x%3").arg(icon.name()).arg(icon_size).arg(dpr);
+
     QPixmap pm;
-    auto icon_urls = index.data(static_cast<int>(ItemRoles::IconUrlsRole)).value<QStringList>();
-    auto icon_size = option.decorationSize.height();
-    const auto icon_cache_key = QStringLiteral("albert$%1%2x%3")
-                                    .arg(icon_urls.join(QString()))
-                                    .arg(icon_size)
-                                    .arg(option.widget->devicePixelRatioF());
     if (!QPixmapCache::find(icon_cache_key, &pm))
     {
-        pm = pixmapFromUrls(icon_urls, int(icon_size * option.widget->devicePixelRatioF()));
-        pm.setDevicePixelRatio(option.widget->devicePixelRatioF());
+        pm = icon.pixmap(QSize(icon_size, icon_size), dpr);
         QPixmapCache::insert(icon_cache_key, pm);
     }
 
