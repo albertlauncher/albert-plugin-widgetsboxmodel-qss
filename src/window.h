@@ -3,7 +3,7 @@
 #pragma once
 #include <QPoint>
 #include <QWidget>
-namespace albert { class Query; }
+namespace albert::detail { class Query; }
 class ActionDelegate;
 class InputLine;
 class ItemDelegate;
@@ -25,7 +25,7 @@ public:
 
     QString input() const;
     void setInput(const QString&);
-    void setQuery(albert::Query *query);
+    void setQuery(albert::detail::Query *query);
     void applyThemeFile(const QString& path);
 
     // Properties
@@ -99,7 +99,7 @@ private:
     bool quitOnClose_{};
     bool history_search_{};
 
-    albert::Query *current_query;
+    albert::detail::Query *current_query;
 
     enum class Mod {Shift, Meta, Contol, Alt};
     Mod mod_command = Mod::Contol;

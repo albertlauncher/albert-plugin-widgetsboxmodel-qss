@@ -31,11 +31,21 @@
 #include <QWindow>
 #include <albert/albert.h>
 #include <albert/logging.h>
+#include <albert/messagebox.h>
+#include <albert/plugininstance.h>
 #include <albert/pluginloader.h>
 #include <albert/pluginmetadata.h>
-#include <albert/query.h>
+#include <albert/queryprivate.h>
+#include <albert/queryexecution.h>
+#include <albert/queryhandler.h>
+#include <albert/queryresults.h>
 using namespace Qt::StringLiterals;
-using namespace albert;
+using albert::detail::Query;
+using albert::PluginInstance;
+using albert::QueryResults;
+using albert::QueryExecution;
+using albert::QueryHandler;
+// using namespace albert;
 using namespace std;
 
 
@@ -248,6 +258,14 @@ Window::Window(Plugin *p):
 
 Window::~Window() = default;
 
+inline static bool isActive(const Query *query) { return query->execution().isActive(); }
+
+inline static bool isGlobal(const Query *query) { return query->trigger().isEmpty(); }
+
+inline static bool hasMatches(const Query *query) { return query->matches().count() > 0; }
+
+inline static bool hasFallbacks(const Query *query) { return query->fallbacks().count() > 0; }
+
 void Window::init_statemachine()
 {
     //
@@ -343,7 +361,7 @@ void Window::init_statemachine()
     setTransition(s_settings_button_shown, s_settings_button_hidden,
                   new ConditionalEventTransition(settings_button, QEvent::Type::Leave,
                                                  [this]{ return !current_query
-                                                                || !current_query->isActive(); }));
+                                                                || !isActive(current_query); }));
 
     setTransition(s_settings_button_shown, s_settings_button_hidden,
                   new ConditionalSignalTransition(this, &Window::queryStateIdle,
@@ -417,7 +435,7 @@ void Window::init_statemachine()
     setTransition(s_results_fallbacks, s_results_hidden,
                   new ConditionalKeyEventTransition(input_line, QEvent::KeyRelease, mods_keys[(int)mod_fallback],
                                                     [this]{ return current_query->matches().size() == 0
-                                                                   && current_query->isActive(); }));
+                                                                   && isActive(current_query); }));
 
     setTransition(s_results_fallbacks, s_results_matches,
                   new ConditionalKeyEventTransition(input_line, QEvent::KeyRelease, mods_keys[(int)mod_fallback],

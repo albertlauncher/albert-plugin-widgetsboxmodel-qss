@@ -12,7 +12,7 @@ public:
     QString name() const override;
     QString description() const override;
     QString defaultTrigger() const override;
-    void handleTriggerQuery(albert::Query &) override;
+    void handleTriggerQuery(ThreadedQuery &) override;
 
 private:
     Window *window;

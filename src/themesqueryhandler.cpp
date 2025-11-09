@@ -23,7 +23,7 @@ QString ThemesQueryHandler::description() const
 
 QString ThemesQueryHandler::defaultTrigger() const { return u"theme "_s; }
 
-void ThemesQueryHandler::handleTriggerQuery(Query &query)
+void ThemesQueryHandler::handleTriggerQuery(ThreadedQuery &query)
 {
     vector<shared_ptr<Item>> items;
     Matcher matcher(query);
